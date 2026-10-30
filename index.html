@@ -314,75 +314,58 @@
       line-height: 1.4;
       margin-top: -4px;
     }
-    .track-card[hidden], .music-tabs[hidden], .music-more[hidden] { display: none; }
-    .music-tabs {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-    .music-tab {
-      padding: 8px 18px;
-      border: 1px solid var(--border);
-      font-size: .68rem;
+    .track-card.is-new .track-art-wrap::before {
+      content: 'New';
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 1;
+      padding: 4px 10px;
+      background: var(--bg-dark);
+      color: var(--gold);
+      font-size: .58rem;
+      font-weight: 600;
       letter-spacing: .14em;
       text-transform: uppercase;
-      color: var(--text-muted);
-      transition: color .2s, border-color .2s, background .2s;
     }
-    .music-tab:hover { color: var(--text); border-color: var(--gold); }
-    .music-tab[aria-selected="true"] {
-      background: var(--bg-dark);
-      border-color: var(--bg-dark);
-      color: var(--white);
-    }
-    .music-tab-count { color: var(--gold); margin-left: 6px; }
-    .music-more {
-      display: flex;
-      justify-content: center;
-      margin-top: 36px;
-    }
-    .music-more-btn {
-      padding: 14px 32px;
-      border: 1px solid var(--gold);
-      font-size: .7rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      color: var(--gold);
-      transition: background .2s, color .2s;
-    }
-    .music-more-btn:hover { background: var(--gold); color: var(--white); }
-    /* "Play all" card for the Ekception Radio channel */
-    .track-card.radio-card { background: var(--bg-dark); }
-    .radio-card .track-title { color: var(--white); }
-    .radio-card .track-artist { color: rgba(255,255,255,.55); }
-    .radio-card .track-meta { color: var(--gold); }
-    .radio-card .track-link { border-top-color: rgba(255,255,255,.12); }
-    .radio-collage {
+    /* Cards 7–8: open the YouTube and Spotify panels */
+    .track-card.folder-card { background: var(--bg-dark); }
+    .folder-card .track-title { color: var(--white); }
+    .folder-card .track-artist { color: rgba(255,255,255,.55); }
+    .folder-card .track-meta { color: var(--gold); }
+    .folder-card .track-link { border-top-color: rgba(255,255,255,.12); }
+    .folder-card[aria-expanded="true"] { border-bottom-color: var(--gold); }
+    .folder-collage {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 2px;
       width: 100%; height: 100%;
+      background: linear-gradient(135deg, #C4975A22, #C4975A44);
     }
-    .radio-collage img {
+    .folder-collage img {
       width: 100%; height: 100%;
       object-fit: cover;
       opacity: .7;
     }
-    /* Mockup only: Bandcamp release waiting for its embed code */
-    .track-card.is-placeholder { cursor: default; }
-    .track-card.is-placeholder .track-art-wrap {
+    .folder-collage img[src=""] { visibility: hidden; }
+    .folder-count {
+      position: absolute;
+      inset: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: repeating-linear-gradient(135deg, #EFE6DA 0 12px, #F6F0E8 12px 24px);
-      border: 1px dashed var(--gold);
-      font-size: .65rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      color: var(--gold);
-      text-align: center;
-      padding: 16px;
+      font-family: var(--serif);
+      font-size: 3.4rem;
+      color: var(--white);
+      text-shadow: 0 2px 16px rgba(0,0,0,.6);
+      pointer-events: none;
+    }
+    .music-panel { margin-top: 56px; }
+    .music-panel[hidden] { display: none; }
+    .music-panel-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 20px;
     }
 
     /* ─── GALLERY ────────────────────────────────── */
@@ -1105,9 +1088,15 @@
   <div class="container">
     <p class="section-eyebrow">Discography</p>
     <h2 class="section-title">Selected Works</h2>
-    <div class="music-tabs" id="music-tabs" role="tablist" aria-label="Filter discography"></div>
     <div class="music-grid" id="music-grid"></div>
-    <div class="music-more"><button class="music-more-btn" id="music-more">Show all</button></div>
+    <div class="music-panel" id="panel-youtube" hidden>
+      <h3 class="music-panel-title">More remixes &amp; edits</h3>
+      <div class="music-grid"></div>
+    </div>
+    <div class="music-panel" id="panel-spotify" hidden>
+      <h3 class="music-panel-title">Spotify releases</h3>
+      <div class="music-grid"></div>
+    </div>
   </div>
 </section>
 
@@ -1358,37 +1347,35 @@
     l.addEventListener('click', () => mobileMenu.classList.remove('active'));
   });
 
-  // Discography — newest first. Add a track by adding a line here.
-  // group: 'remix' (remixes & edits) or 'release' (originals)
-  const DISCOGRAPHY = [
-    { yt: 'iChgX6Sp9kw', title: 'เพียงสิ่งเดียว (Just One Thing)', artist: 'Solitude Is Bliss', kind: 'Remix', year: 2026, group: 'remix' },
-    { yt: 'NlLLyDK4gpM', title: 'นครดารา', artist: 'YOUNGOHM', kind: 'Remix', year: 2025, group: 'remix' },
-    { yt: 'IPcFMEd2vq4', title: 'ฤดูที่แตกต่าง', artist: 'Boyd Kosiyapong', kind: 'Remix', year: 2025, group: 'remix' },
-    { yt: 'vXGktiHZpYA', title: 'เพื่อนเล่น ไม่เล่นเพื่อน', artist: "Tilly Birds x Cosmo's Midnight", kind: 'Fantasy Edit', year: 2024, group: 'remix' },
-    { yt: '5_g-x8Ebyo4', title: 'True Blue (เก็บผ้า)', artist: 'Yellow Fang', kind: 'Remix', year: 2024, group: 'remix' },
-    { bandcamp: 'placeholder', title: 'Bandcamp release', artist: 'Ekception', kind: 'Single', year: null, group: 'release' },
-    { yt: 'R9cGrhwBCCU', title: 'ชอบอยู่คนเดียว', artist: 'Ink Waruntorn', kind: 'Remix', year: 2023, group: 'remix' },
-    { yt: 'Rn1XXG2baQc', title: 'เจ้าหญิงคนต่อไป', artist: 'Blissonic x Jupiter', kind: 'Rollerskates Edit', year: 2023, group: 'remix' },
-    { yt: 'Mctc055fHQY', title: 'Glimpse of Us', artist: 'Joji', kind: 'Remix', year: 2023, group: 'remix' },
-    { yt: 'M9iZU-06xvY', title: '1 2 3 4 5 I Love September', artist: 'The Bottom Blues vs Earth, Wind & Fire', kind: 'Mashup', year: 2022, group: 'remix' },
-    { yt: 'wthO9GvCtTU', title: 'ผมไม่วุ่น', artist: 'The Impossibles', kind: 'Re-Edit', year: 2022, group: 'remix' },
-    { yt: '0eiK_DIqe7c', title: 'ทราบแล้วเปลี่ยน (Attention Please)', artist: 'BOWKYLION', kind: 'Disco Pop Edit', year: 2022, group: 'remix' },
-    { yt: 'i6vNBHNToSA', title: 'Real Eyes', artist: 'Motley Flower ft. Pae Arak & Numcha', kind: 'Edit', year: 2022, group: 'remix' },
-    { spotify: 'track/4AGNfcIoqP0zTAvXGVGHGI', title: 'The Cage', artist: null, kind: 'Remix', year: 2022, group: 'remix' },
-    { spotify: 'album/3LTdTwdveOR4GmGsBLidQW', title: 'Cheat Day', artist: 'Ekception', kind: 'Single', year: 2022, group: 'release' },
-    { yt: 'tQeK9dHGCNw', title: 'ไม่อยากให้เธอไว้ใจ', artist: 'Marsha', kind: 'Club Mix', year: 2021, group: 'remix' },
-    { yt: '1lnOiy3X51I', title: 'เผลอ', artist: 'Mr. Z', kind: 'Disco Edit', year: 2021, group: 'remix' },
-    { yt: 'sxvJ8tiwXJc', title: 'อย่าสัญญา', artist: 'ธาริณี ทิวารี', kind: 'Edit', year: 2021, group: 'remix' },
-    { yt: 'SPGnEDjig7I', title: 'Barbie Girl', artist: 'Mothermary', kind: 'Remix', year: 2021, group: 'remix' },
-    { yt: '1fcyUMy_7pw', title: 'แอบเจ็บ', artist: 'XYZ', kind: 'Remix', year: 2021, group: 'remix' },
-    { bandcamp: 'placeholder', title: 'Bandcamp release', artist: 'Ekception', kind: 'EP', year: null, group: 'release' },
-    { yt: '8FkT2XWmzwI', title: 'Wonder', artist: 'ADOY', kind: 'Edit', year: null, group: 'remix' },
-    { yt: 'fSVuPVaNkKA', title: 'Never Had a Love Like This Before', artist: 'Tavares', kind: 'Re-Edit', year: null, group: 'remix' },
-    { spotify: 'album/47gKgP662CscLkVkiD5eEy', title: 'Wildlife EP', artist: 'Ekception', kind: 'EP', year: 2020, group: 'release' },
+  // Discography. Add a track by adding a line here.
+  // YouTube tracks are ordered by views (counts as of Oct 2026); `isNew` pins a track first.
+  const YOUTUBE_TRACKS = [
+    { yt: 'iChgX6Sp9kw', title: 'เพียงสิ่งเดียว (Just One Thing)', artist: 'Solitude Is Bliss', kind: 'Remix', year: 2026, views: 1082, isNew: true },
+    { yt: 'NlLLyDK4gpM', title: 'นครดารา', artist: 'YOUNGOHM', kind: 'Remix', year: 2025, views: 24993 },
+    { yt: 'sxvJ8tiwXJc', title: 'อย่าสัญญา', artist: 'ธาริณี ทิวารี', kind: 'Edit', year: 2021, views: 15779 },
+    { yt: 'tQeK9dHGCNw', title: 'ไม่อยากให้เธอไว้ใจ', artist: 'Marsha', kind: 'Club Mix', year: 2021, views: 13000 },
+    { yt: '1lnOiy3X51I', title: 'เผลอ', artist: 'Mr. Z', kind: 'Disco Edit', year: 2021, views: 13000 },
+    { yt: 'fSVuPVaNkKA', title: 'Never Had a Love Like This Before', artist: 'Tavares', kind: 'Re-Edit', year: null, views: 10000 },
+    { yt: 'SPGnEDjig7I', title: 'Barbie Girl', artist: 'Mothermary', kind: 'Remix', year: 2021, views: 7589 },
+    { yt: '0eiK_DIqe7c', title: 'ทราบแล้วเปลี่ยน (Attention Please)', artist: 'BOWKYLION', kind: 'Disco Pop Edit', year: 2022, views: 5615 },
+    { yt: '1fcyUMy_7pw', title: 'แอบเจ็บ', artist: 'XYZ', kind: 'Remix', year: 2021, views: 3649 },
+    { yt: 'IPcFMEd2vq4', title: 'ฤดูที่แตกต่าง', artist: 'Boyd Kosiyapong', kind: 'Remix', year: 2025, views: 2976 },
+    { yt: '5_g-x8Ebyo4', title: 'True Blue (เก็บผ้า)', artist: 'Yellow Fang', kind: 'Remix', year: 2024, views: 2626 },
+    { yt: 'Rn1XXG2baQc', title: 'เจ้าหญิงคนต่อไป', artist: 'Blissonic x Jupiter', kind: 'Rollerskates Edit', year: 2023, views: 2429 },
+    { yt: 'R9cGrhwBCCU', title: 'ชอบอยู่คนเดียว', artist: 'Ink Waruntorn', kind: 'Remix', year: 2023, views: 2196 },
+    { yt: '8FkT2XWmzwI', title: 'Wonder', artist: 'ADOY', kind: 'Edit', year: null, views: 1900 },
+    { yt: 'i6vNBHNToSA', title: 'Real Eyes', artist: 'Motley Flower ft. Pae Arak & Numcha', kind: 'Edit', year: 2022, views: 1733 },
+    { yt: 'M9iZU-06xvY', title: '1 2 3 4 5 I Love September', artist: 'The Bottom Blues vs Earth, Wind & Fire', kind: 'Mashup', year: 2022, views: 1386 },
+    { yt: 'vXGktiHZpYA', title: 'เพื่อนเล่น ไม่เล่นเพื่อน', artist: "Tilly Birds x Cosmo's Midnight", kind: 'Fantasy Edit', year: 2024, views: 1196 },
+    { yt: 'Mctc055fHQY', title: 'Glimpse of Us', artist: 'Joji', kind: 'Remix', year: 2023, views: 886 },
+    { yt: 'wthO9GvCtTU', title: 'ผมไม่วุ่น', artist: 'The Impossibles', kind: 'Re-Edit', year: 2022, views: 698 },
   ];
-  const RADIO_UPLOADS = 'UU_btRn1ohsOyvvQ56eWdP2w'; // Ekception Radio channel uploads playlist
-  const VISIBLE = 8;
-  const layout = new URLSearchParams(location.search).get('layout') === 'tabs' ? 'tabs' : 'more'; // mockup toggle
+  const SPOTIFY_RELEASES = [
+    { spotify: 'album/3LTdTwdveOR4GmGsBLidQW', title: 'Cheat Day', kind: 'Single', year: 2022 },
+    { spotify: 'track/4AGNfcIoqP0zTAvXGVGHGI', title: 'The Cage', kind: 'Remix', year: 2022 },
+    { spotify: 'album/47gKgP662CscLkVkiD5eEy', title: 'Wildlife EP', kind: 'EP', year: 2020 },
+  ];
+  const TOP_COUNT = 6; // YouTube tracks shown before the "more" cards
 
   const playIcon = '<div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>';
   const linkIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1396,12 +1383,6 @@
   function trackCardHTML(t) {
     const meta = [t.kind, t.year].filter(Boolean).join(' · ');
     const artist = t.artist ? `<span class="track-artist">${t.artist}</span>` : '';
-    if (t.bandcamp === 'placeholder') {
-      return `<div class="track-card is-placeholder" data-group="${t.group}">
-        <div class="track-art-wrap">Bandcamp release<br>— waiting for embed code —</div>
-        <span class="track-title">${t.title}</span>${artist}<span class="track-meta">${meta}</span>
-        <span class="track-link">${linkIcon}Bandcamp</span></div>`;
-    }
     let attrs, art;
     if (t.yt) {
       attrs = `data-embed="https://www.youtube.com/embed/${t.yt}" data-embed-type="youtube" data-watch="https://youtu.be/${t.yt}"`;
@@ -1410,66 +1391,50 @@
       attrs = `data-embed="https://open.spotify.com/embed/${t.spotify}" data-embed-type="spotify" data-spotify="https://open.spotify.com/${t.spotify}"`;
       art = `<img class="track-art" src="" alt="${t.title}" loading="lazy" data-spotify-art />`;
     }
-    return `<div class="track-card" ${attrs} data-title="${t.title}" data-meta="${[t.artist, meta].filter(Boolean).join(' · ')}" data-group="${t.group}">
+    return `<div class="track-card${t.isNew ? ' is-new' : ''}" ${attrs} data-title="${t.title}" data-meta="${[t.artist, meta].filter(Boolean).join(' · ')}">
       <div class="track-art-wrap">${art}${playIcon}</div>
       <span class="track-title">${t.title}</span>${artist}<span class="track-meta">${meta}</span>
       <span class="track-link">${linkIcon}Play</span></div>`;
   }
-  function radioCardHTML() {
-    const count = DISCOGRAPHY.filter(t => t.yt).length;
-    const thumbs = DISCOGRAPHY.filter(t => t.yt).slice(0, 4)
-      .map(t => `<img src="https://img.youtube.com/vi/${t.yt}/mqdefault.jpg" alt="" loading="lazy" />`).join('');
-    return `<div class="track-card radio-card" data-embed="https://www.youtube.com/embed/videoseries?list=${RADIO_UPLOADS}" data-embed-type="youtube" data-playlist="${RADIO_UPLOADS}" data-watch="https://www.youtube.com/@EkceptionRadio" data-title="Ekception Radio" data-meta="All remixes & edits" data-group="remix">
-      <div class="track-art-wrap"><div class="radio-collage">${thumbs}</div>${playIcon}</div>
-      <span class="track-title">Play all on Ekception Radio</span>
-      <span class="track-artist">${count} remixes &amp; edits, plus every new upload</span>
-      <span class="track-meta">YouTube playlist</span>
-      <span class="track-link">${linkIcon}Play all</span></div>`;
+  function folderCardHTML(panel, collage, count, title, sub, meta) {
+    return `<div class="track-card folder-card" data-panel="${panel}" aria-expanded="false">
+      <div class="track-art-wrap"><div class="folder-collage">${collage}</div><span class="folder-count">${count}</span></div>
+      <span class="track-title">${title}</span>
+      <span class="track-artist">${sub}</span>
+      <span class="track-meta">${meta}</span>
+      <span class="track-link">${linkIcon}<span class="folder-action">Show all</span></span></div>`;
   }
 
-  const musicGrid = document.getElementById('music-grid');
-  const musicTabs = document.getElementById('music-tabs');
-  const musicMore = document.getElementById('music-more');
-  musicGrid.innerHTML = DISCOGRAPHY.map(trackCardHTML).join('') + radioCardHTML();
-  let musicFilter = 'all';
-  let musicExpanded = false;
+  const ytSorted = [...YOUTUBE_TRACKS].sort((a, b) => (!!b.isNew - !!a.isNew) || (b.views - a.views));
+  const ytTop  = ytSorted.slice(0, TOP_COUNT);
+  const ytRest = ytSorted.slice(TOP_COUNT);
+  const ytCollage = ytRest.slice(0, 4)
+    .map(t => `<img src="https://img.youtube.com/vi/${t.yt}/mqdefault.jpg" alt="" loading="lazy" />`).join('');
+  const spCollage = SPOTIFY_RELEASES
+    .map(t => `<img src="" alt="" data-spotify="https://open.spotify.com/${t.spotify}" data-spotify-art />`).join('');
+  document.getElementById('music-grid').innerHTML = ytTop.map(trackCardHTML).join('')
+    + folderCardHTML('panel-youtube', ytCollage, `+${ytRest.length}`, 'More remixes &amp; edits', `${ytRest.length} more on Ekception Radio`, 'YouTube')
+    + folderCardHTML('panel-spotify', spCollage, SPOTIFY_RELEASES.length, 'Spotify releases', SPOTIFY_RELEASES.map(t => t.title).join(', '), 'Spotify');
+  document.querySelector('#panel-youtube .music-grid').innerHTML = ytRest.map(trackCardHTML).join('');
+  document.querySelector('#panel-spotify .music-grid').innerHTML = SPOTIFY_RELEASES.map(trackCardHTML).join('');
 
-  function updateGrid() {
-    const cards = [...musicGrid.children];
-    const matching = cards.filter(c => musicFilter === 'all' || c.dataset.group === musicFilter);
-    const radio = musicGrid.querySelector('.radio-card');
-    cards.forEach(c => { c.hidden = !matching.includes(c); });
-    if (!musicExpanded && matching.length > VISIBLE + 1) {
-      // keep the "play all" card visible as the last tile
-      matching.filter(c => c !== radio).slice(VISIBLE - 1).forEach(c => { c.hidden = true; });
-    }
-    const total = matching.filter(c => c !== radio).length;
-    musicMore.parentElement.hidden = matching.length <= VISIBLE + 1;
-    musicMore.textContent = musicExpanded ? 'Show fewer' : `Show all ${total} tracks`;
-  }
-  if (layout === 'tabs') {
-    const groups = [['all', 'All'], ['remix', 'Remixes & Edits'], ['release', 'Releases']];
-    musicTabs.innerHTML = groups.map(([g, label]) => {
-      const n = DISCOGRAPHY.filter(t => g === 'all' || t.group === g).length;
-      return `<button class="music-tab" role="tab" data-group="${g}" aria-selected="${g === 'all'}">${label}<span class="music-tab-count">${n}</span></button>`;
-    }).join('');
-    musicTabs.addEventListener('click', e => {
-      const tab = e.target.closest('.music-tab');
-      if (!tab) return;
-      musicFilter = tab.dataset.group;
-      musicExpanded = false;
-      musicTabs.querySelectorAll('.music-tab').forEach(b => b.setAttribute('aria-selected', b === tab));
-      updateGrid();
+  document.querySelectorAll('.folder-card').forEach(card => {
+    const panel = document.getElementById(card.dataset.panel);
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-controls', card.dataset.panel);
+    const toggle = () => {
+      const open = panel.hidden;
+      panel.hidden = !open;
+      card.setAttribute('aria-expanded', open);
+      card.querySelector('.folder-action').textContent = open ? 'Show fewer' : 'Show all';
+      if (open) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
     });
-  } else {
-    musicTabs.hidden = true;
-  }
-  musicMore.addEventListener('click', () => {
-    musicExpanded = !musicExpanded;
-    updateGrid();
-    if (!musicExpanded) document.getElementById('music').scrollIntoView();
   });
-  updateGrid();
 
   // Player bar
   const tracks         = [...document.querySelectorAll('.track-card[data-embed]')];
@@ -1621,7 +1586,7 @@
   // Spotify artwork via oEmbed (client-side, CORS-safe)
   document.querySelectorAll('[data-spotify]').forEach(card => {
     const url = card.dataset.spotify;
-    const img = card.querySelector('[data-spotify-art]');
+    const img = card.matches('[data-spotify-art]') ? card : card.querySelector('[data-spotify-art]');
     if (!img) return;
     fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)
       .then(r => r.json())
