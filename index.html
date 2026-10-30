@@ -267,10 +267,10 @@
     }
     .track-card {
       background: var(--white);
-      padding: 28px 24px;
+      padding: 20px 36px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
       border-bottom: 2px solid transparent;
       transition: border-color .25s, transform .2s;
     }
@@ -281,10 +281,14 @@
     .track-card { cursor: pointer; }
     .track-title {
       font-family: var(--serif);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 400;
       color: var(--text);
       line-height: 1.3;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .track-meta {
       font-size: .7rem;
@@ -292,17 +296,25 @@
       text-transform: uppercase;
       color: var(--text-muted);
     }
+    /* Bottom row: "Play" on the left, type · year on the right */
+    .track-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
     .track-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: auto;
-      padding-top: 12px;
       font-size: .68rem;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--gold);
-      border-top: 1px solid var(--border);
       transition: gap .2s;
     }
     .track-link:hover { gap: 10px; }
@@ -312,7 +324,7 @@
       font-size: .82rem;
       color: var(--text-muted);
       line-height: 1.4;
-      margin-top: -4px;
+      margin-bottom: 4px;
     }
     .track-card.is-new .track-art-wrap::before {
       content: 'New';
@@ -332,7 +344,7 @@
     .folder-card .track-title { color: var(--white); }
     .folder-card .track-artist { color: rgba(255,255,255,.55); }
     .folder-card .track-meta { color: var(--gold); }
-    .folder-card .track-link { border-top-color: rgba(255,255,255,.12); }
+    .folder-card .track-foot { border-top-color: rgba(255,255,255,.12); }
     .folder-card[aria-expanded="true"] { border-bottom-color: var(--gold); }
     .folder-collage {
       display: grid;
@@ -978,6 +990,25 @@
       .form-row { grid-template-columns: 1fr; }
       .live-cols { grid-template-columns: 1fr; }
       .music-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+      .track-card { padding: 16px 20px; }
+      /* No hover on touch screens: show a small play button on the cover instead of the "Play" link */
+      .track-play-overlay {
+        opacity: 1;
+        background: none;
+        align-items: flex-end;
+        justify-content: flex-end;
+        padding: 8px;
+      }
+      .track-play-icon { width: 30px; height: 30px; }
+      .track-foot .track-link { display: none; }
+      .folder-card .track-foot .track-link { display: inline-flex; }
+      .folder-card .track-foot .track-meta { display: none; }
+      .track-title {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
       .gallery-item:nth-child(1),
       .gallery-item:nth-child(5) { grid-column: span 2; }
@@ -1393,16 +1424,15 @@
     }
     return `<div class="track-card${t.isNew ? ' is-new' : ''}" ${attrs} data-title="${t.title}" data-meta="${[t.artist, meta].filter(Boolean).join(' · ')}">
       <div class="track-art-wrap">${art}${playIcon}</div>
-      <span class="track-title">${t.title}</span>${artist}<span class="track-meta">${meta}</span>
-      <span class="track-link">${linkIcon}Play</span></div>`;
+      <span class="track-title" title="${t.title}">${t.title}</span>${artist}
+      <div class="track-foot"><span class="track-link">${linkIcon}Play</span><span class="track-meta">${meta}</span></div></div>`;
   }
   function folderCardHTML(panel, collage, count, title, sub, meta) {
     return `<div class="track-card folder-card" data-panel="${panel}" aria-expanded="false">
       <div class="track-art-wrap"><div class="folder-collage">${collage}</div><span class="folder-count">${count}</span></div>
       <span class="track-title">${title}</span>
       <span class="track-artist">${sub}</span>
-      <span class="track-meta">${meta}</span>
-      <span class="track-link">${linkIcon}<span class="folder-action">Show all</span></span></div>`;
+      <div class="track-foot"><span class="track-link">${linkIcon}<span class="folder-action">Show all</span></span><span class="track-meta">${meta}</span></div></div>`;
   }
 
   const ytSorted = [...YOUTUBE_TRACKS].sort((a, b) => (!!b.isNew - !!a.isNew) || (b.views - a.views));
