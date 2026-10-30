@@ -659,87 +659,143 @@
       .fest-logo-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
-    /* ─── PLAYER MODAL ──────────────────────────── */
-    .player-modal {
-      display: none;
+    /* ─── PLAYER BAR ────────────────────────────── */
+    :root { --pb-h: 100px; }
+    body.has-player { padding-bottom: var(--pb-h); }
+    .player-bar {
       position: fixed;
-      inset: 0;
-      z-index: 200;
-      background: rgba(0,0,0,.88);
-      align-items: flex-start;
-      justify-content: center;
-      padding: 60px 20px 40px;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .player-modal.active { display: flex; }
-    .player-modal-inner {
-      position: relative;
-      width: 100%;
-      max-width: 700px;
-    }
-    .player-modal-header {
+      left: 0; right: 0; bottom: 0;
+      z-index: 150;
+      height: var(--pb-h);
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      padding-bottom: 12px;
-      gap: 16px;
+      align-items: center;
+      gap: 20px;
+      padding: 0 32px;
+      background: var(--bg-dark);
+      border-top: 1px solid rgba(196,151,90,.35);
+      box-shadow: 0 -8px 32px rgba(0,0,0,.25);
+      transform: translateY(100%);
+      visibility: hidden;
+      transition: transform .35s ease, visibility 0s .35s;
     }
-    .player-modal-title {
+    .player-bar.active {
+      transform: translateY(0);
+      visibility: visible;
+      transition: transform .35s ease;
+    }
+    .pb-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex: 1;
+      min-width: 0;
+    }
+    .pb-art {
+      width: 56px; height: 56px;
+      object-fit: cover;
+      flex-shrink: 0;
+      background: #2A2520;
+    }
+    .pb-text { min-width: 0; }
+    .pb-title {
       font-family: var(--serif);
-      font-size: 1.2rem;
+      font-size: 1.15rem;
       color: var(--white);
       line-height: 1.2;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .player-modal-meta {
-      font-size: .65rem;
+    .pb-meta {
+      font-size: .62rem;
       letter-spacing: .12em;
       text-transform: uppercase;
       color: rgba(255,255,255,.45);
-      margin-top: 4px;
+      margin-top: 3px;
     }
-    .player-close-btn {
-      color: rgba(255,255,255,.55);
-      font-size: 1.6rem;
-      cursor: pointer;
+    .pb-yt-link {
+      display: inline-block;
+      margin-top: 6px;
+      font-size: .62rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
       transition: color .2s;
-      flex-shrink: 0;
-      line-height: 1;
     }
-    .player-close-btn:hover { color: var(--white); }
-    .player-iframe-sp {
-      width: 100%;
-      height: 152px;
-      border: none;
+    .pb-yt-link:hover { color: var(--gold-lt); }
+    .pb-embed {
+      display: none;
+      flex: 1;
+      min-width: 0;
+      max-width: 720px;
+    }
+    .pb-embed iframe {
       display: block;
+      width: 100%;
+      height: 80px;
+      border: none;
       border-radius: 12px;
     }
-    /* YouTube nocookie iframe — sits on top of thumbnail fallback */
-    .player-iframe-yt-nc {
+    /* Spotify's widget shows its own art and title */
+    .player-bar.is-spotify .pb-info { display: none; }
+    .player-bar.is-spotify .pb-embed { display: block; }
+    .pb-controls {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+    .pb-btn {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: rgba(255,255,255,.65);
+      transition: color .2s, background .2s;
+    }
+    .pb-btn:hover:not(:disabled) { color: var(--gold); background: rgba(255,255,255,.06); }
+    .pb-btn:disabled { opacity: .3; cursor: default; }
+    .pb-btn:focus-visible,
+    .track-card:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+    /* YouTube video window — YouTube requires the player to stay visible (min 200px tall) */
+    .player-video {
+      display: none;
+      position: fixed;
+      right: 24px;
+      bottom: calc(var(--pb-h) + 16px);
+      z-index: 150;
+      width: 400px;
+      aspect-ratio: 16/9;
+      background: #000;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 12px 40px rgba(0,0,0,.45);
+    }
+    .player-video.active { display: block; }
+    .player-video iframe {
       position: absolute;
       inset: 0;
       width: 100%;
       height: 100%;
       border: none;
-      z-index: 2;
     }
-    /* YouTube preview (thumbnail fallback behind iframe) */
-    .yt-preview {
+    /* Shown when the video's owner blocks playback on other sites */
+    .yt-blocked {
       display: none;
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16/9;
+      position: absolute;
+      inset: 0;
+      z-index: 2;
       background: #000;
-      border-radius: 8px;
-      overflow: hidden;
     }
-    .yt-preview.active { display: block; }
-    .yt-preview-thumb {
+    .yt-blocked.active { display: block; }
+    .yt-blocked img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      display: block;
-      opacity: .55;
+      opacity: .45;
     }
     .yt-watch-btn {
       position: absolute;
@@ -752,10 +808,10 @@
       background: #ff0000;
       color: #fff;
       text-decoration: none;
-      padding: 14px 28px;
+      padding: 12px 24px;
       border-radius: 6px;
       font-family: var(--sans);
-      font-size: .85rem;
+      font-size: .8rem;
       font-weight: 600;
       letter-spacing: .06em;
       white-space: nowrap;
@@ -764,6 +820,36 @@
     }
     .yt-watch-btn:hover { background: #cc0000; transform: translate(-50%,-50%) scale(1.04); }
     .yt-watch-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+
+    /* Now-playing state on the track grid */
+    .track-card.is-playing { border-bottom-color: var(--gold); }
+    .track-card.is-playing .track-play-overlay { opacity: 1; }
+    .track-card.is-playing .track-play-icon { background: var(--gold); }
+    .track-card.is-playing .track-art-wrap::after {
+      content: 'Now playing';
+      position: absolute;
+      left: 12px; bottom: 12px;
+      padding: 4px 10px;
+      background: var(--gold);
+      color: var(--bg-dark);
+      font-size: .58rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 600px) {
+      :root { --pb-h: 96px; }
+      .player-bar { padding: 0 12px; gap: 10px; }
+      .pb-art { width: 48px; height: 48px; }
+      .pb-btn { width: 34px; height: 34px; }
+      .player-video {
+        left: 0; right: 0;
+        bottom: var(--pb-h);
+        width: 100%;
+        border-radius: 0;
+      }
+    }
 
     /* ─── PHOTO GALLERY ─────────────────────── */
     .gallery-wrap {
@@ -1061,26 +1147,31 @@
   </div>
 </section>
 
-<!-- player modal -->
-<div class="player-modal" id="player-modal">
-  <div class="player-modal-inner">
-    <div class="player-modal-header">
-      <div>
-        <div class="player-modal-title" id="player-title"></div>
-        <div class="player-modal-meta" id="player-meta"></div>
-      </div>
-      <span class="player-close-btn" id="player-close">✕</span>
+<!-- player bar -->
+<div class="player-video" id="player-video">
+  <div id="yt-host"></div>
+  <div class="yt-blocked" id="yt-blocked">
+    <img id="yt-blocked-thumb" src="" alt="">
+    <a class="yt-watch-btn" id="yt-watch-btn" href="" target="_blank" rel="noopener">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
+      Watch on YouTube
+    </a>
+  </div>
+</div>
+<div class="player-bar" id="player-bar" role="region" aria-label="Music player">
+  <div class="pb-info">
+    <img class="pb-art" id="pb-art" src="" alt="">
+    <div class="pb-text">
+      <div class="pb-title" id="pb-title"></div>
+      <div class="pb-meta" id="pb-meta"></div>
+      <a class="pb-yt-link" id="pb-yt-link" href="" target="_blank" rel="noopener">Open on YouTube ↗</a>
     </div>
-    <iframe id="player-iframe" src="" frameborder="0" allowfullscreen
-      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-    <!-- YouTube preview (used when embedding is blocked by Content ID) -->
-    <div class="yt-preview" id="yt-preview">
-      <img class="yt-preview-thumb" id="yt-thumb" src="" alt="">
-      <a class="yt-watch-btn" id="yt-watch-btn" href="" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2C0 8.1 0 12 0 12s0 3.9.5 5.8a3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1C24 15.9 24 12 24 12s0-3.9-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z"/></svg>
-        Watch on YouTube
-      </a>
-    </div>
+  </div>
+  <div class="pb-embed" id="pb-embed"></div>
+  <div class="pb-controls">
+    <button class="pb-btn" id="pb-prev" aria-label="Previous track"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><rect x="2" y="3" width="2" height="10"/><polygon points="14,3 14,13 5,8"/></svg></button>
+    <button class="pb-btn" id="pb-next" aria-label="Next track"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><polygon points="2,3 2,13 11,8"/><rect x="12" y="3" width="2" height="10"/></svg></button>
+    <button class="pb-btn" id="pb-close" aria-label="Close player"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 2l10 10M12 2L2 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></button>
   </div>
 </div>
 
@@ -1271,49 +1362,122 @@
     l.addEventListener('click', () => mobileMenu.classList.remove('active'));
   });
 
-  // Player modal
-  const playerModal  = document.getElementById('player-modal');
-  const playerIframe = document.getElementById('player-iframe');
-  const playerTitle  = document.getElementById('player-title');
-  const playerMeta   = document.getElementById('player-meta');
-  const ytPreview    = document.getElementById('yt-preview');
-  const ytThumb      = document.getElementById('yt-thumb');
-  const ytWatchBtn   = document.getElementById('yt-watch-btn');
+  // Player bar
+  const tracks         = [...document.querySelectorAll('.track-card[data-embed]')];
+  const playerBar      = document.getElementById('player-bar');
+  const pbArt          = document.getElementById('pb-art');
+  const pbTitle        = document.getElementById('pb-title');
+  const pbMeta         = document.getElementById('pb-meta');
+  const pbYtLink       = document.getElementById('pb-yt-link');
+  const pbEmbed        = document.getElementById('pb-embed');
+  const pbPrev         = document.getElementById('pb-prev');
+  const pbNext         = document.getElementById('pb-next');
+  const playerVideo    = document.getElementById('player-video');
+  const ytHost         = document.getElementById('yt-host');
+  const ytBlocked      = document.getElementById('yt-blocked');
+  const ytBlockedThumb = document.getElementById('yt-blocked-thumb');
+  const ytWatchBtn     = document.getElementById('yt-watch-btn');
+  let current  = -1;
+  let ytPlayer = null;
 
-  function openPlayer(embedUrl, type, title, meta, watchUrl) {
-    playerTitle.textContent = title;
-    playerMeta.textContent  = meta;
-    playerIframe.style.display = 'block';
-    playerIframe.className = 'player-iframe-sp';
-    playerIframe.src = embedUrl;
-    ytPreview.classList.remove('active');
-    playerModal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    document.documentElement.style.overflow = 'hidden';
+  // YouTube IFrame API — loaded on first YouTube play so we can detect blocked videos
+  let ytApi = null;
+  function loadYouTubeApi() {
+    if (!ytApi) {
+      ytApi = new Promise((resolve, reject) => {
+        window.onYouTubeIframeAPIReady = () => resolve(window.YT);
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        s.onerror = reject;
+        document.head.appendChild(s);
+        setTimeout(reject, 8000);
+      });
+    }
+    return ytApi;
+  }
+
+  function stopPlayback() {
+    if (ytPlayer) { ytPlayer.destroy(); ytPlayer = null; }
+    ytHost.innerHTML = '';
+    pbEmbed.innerHTML = '';
+    ytBlocked.classList.remove('active');
+    playerVideo.classList.remove('active');
+  }
+
+  function playYouTube(card) {
+    const id = card.dataset.embed.split('/').pop();
+    ytBlockedThumb.src = card.querySelector('.track-art').src;
+    ytWatchBtn.href = card.dataset.watch;
+    playerVideo.classList.add('active');
+    const target = document.createElement('div');
+    ytHost.appendChild(target);
+    loadYouTubeApi().then(YT => {
+      if (!target.isConnected) return; // visitor moved on while the API loaded
+      const player = ytPlayer = new YT.Player(target, {
+        host: 'https://www.youtube-nocookie.com',
+        videoId: id,
+        playerVars: { autoplay: 1, playsinline: 1, rel: 0 },
+        events: {
+          onReady: e => e.target.playVideo(),
+          onError: () => { if (ytPlayer === player) ytBlocked.classList.add('active'); }
+        }
+      });
+    }).catch(() => {
+      // API unavailable (e.g. blocked by an extension) — fall back to a plain embed
+      if (!target.isConnected) return;
+      target.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+    });
+  }
+
+  function playSpotify(card) {
+    const iframe = document.createElement('iframe');
+    iframe.src   = `${card.dataset.embed}?theme=0`;
+    iframe.allow = 'autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture';
+    iframe.title = `${card.dataset.title} on Spotify`;
+    pbEmbed.appendChild(iframe);
+  }
+
+  function playTrack(i) {
+    stopPlayback();
+    if (current >= 0) tracks[current].classList.remove('is-playing');
+    current = i;
+    const card = tracks[i];
+    const isSpotify = card.dataset.embedType === 'spotify';
+    card.classList.add('is-playing');
+    playerBar.classList.toggle('is-spotify', isSpotify);
+    pbArt.src = card.querySelector('.track-art').src;
+    pbTitle.textContent = card.dataset.title;
+    pbMeta.textContent  = card.dataset.meta;
+    pbYtLink.href = card.dataset.watch || '';
+    pbPrev.disabled = i === 0;
+    pbNext.disabled = i === tracks.length - 1;
+    if (isSpotify) playSpotify(card); else playYouTube(card);
+    playerBar.classList.add('active');
+    document.body.classList.add('has-player');
   }
   function closePlayer() {
-    playerModal.classList.remove('active');
-    playerIframe.src = '';
-    playerIframe.style.display = 'block';
-    ytPreview.classList.remove('active');
-    document.body.style.overflow = '';
-    document.documentElement.style.overflow = '';
+    stopPlayback();
+    if (current >= 0) tracks[current].classList.remove('is-playing');
+    current = -1;
+    playerBar.classList.remove('active');
+    document.body.classList.remove('has-player');
   }
 
-  document.querySelectorAll('.track-card[data-embed]').forEach(card => {
-    card.addEventListener('click', () => {
-      if (card.dataset.embedType === 'youtube') {
-        window.open(card.dataset.watch, '_blank', 'noopener');
-      } else {
-        openPlayer(card.dataset.embed, card.dataset.embedType, card.dataset.title, card.dataset.meta);
+  tracks.forEach((card, i) => {
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-label', `Play ${card.dataset.title}`);
+    card.addEventListener('click', () => { if (i !== current) playTrack(i); });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        if (i !== current) playTrack(i);
       }
     });
   });
-  document.getElementById('player-close').addEventListener('click', closePlayer);
-  playerModal.addEventListener('click', e => {
-    if (!e.target.closest('.player-modal-inner')) closePlayer();
-  });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePlayer(); });
+  pbPrev.addEventListener('click', () => playTrack(current - 1));
+  pbNext.addEventListener('click', () => playTrack(current + 1));
+  document.getElementById('pb-close').addEventListener('click', closePlayer);
 
   // Form
   function handleSubmit(e) {
