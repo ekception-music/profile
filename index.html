@@ -270,7 +270,7 @@
       padding: 28px 24px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 6px;
       border-bottom: 2px solid transparent;
       transition: border-color .25s, transform .2s;
     }
@@ -281,10 +281,14 @@
     .track-card { cursor: pointer; }
     .track-title {
       font-family: var(--serif);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: 400;
       color: var(--text);
       line-height: 1.3;
+      margin-top: 6px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .track-meta {
       font-size: .7rem;
@@ -292,21 +296,89 @@
       text-transform: uppercase;
       color: var(--text-muted);
     }
+    /* Bottom row: "Play" on the left, type · year on the right */
+    .track-foot {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px 12px;
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+    }
     .track-link {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      margin-top: auto;
-      padding-top: 12px;
       font-size: .68rem;
       letter-spacing: .14em;
       text-transform: uppercase;
       color: var(--gold);
-      border-top: 1px solid var(--border);
       transition: gap .2s;
     }
     .track-link:hover { gap: 10px; }
     .track-link svg { flex-shrink: 0; }
+
+    .track-artist {
+      font-size: .82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-bottom: 4px;
+    }
+    .track-card.is-new .track-art-wrap::before {
+      content: 'New';
+      position: absolute;
+      top: 12px; left: 12px;
+      z-index: 1;
+      padding: 4px 10px;
+      background: var(--bg-dark);
+      color: var(--gold);
+      font-size: .58rem;
+      font-weight: 600;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    /* Cards 7–8: open the YouTube and Spotify panels */
+    .track-card.folder-card { background: var(--bg-dark); }
+    .folder-card .track-title { color: var(--white); }
+    .folder-card .track-artist { color: rgba(255,255,255,.55); }
+    .folder-card .track-meta { color: var(--gold); }
+    .folder-card .track-foot { border-top-color: rgba(255,255,255,.12); }
+    .folder-card[aria-expanded="true"] { border-bottom-color: var(--gold); }
+    .folder-collage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg, #C4975A22, #C4975A44);
+    }
+    .folder-collage img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .7;
+    }
+    .folder-collage img[src=""] { visibility: hidden; }
+    .folder-count {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--serif);
+      font-size: 3.4rem;
+      color: var(--white);
+      text-shadow: 0 2px 16px rgba(0,0,0,.6);
+      pointer-events: none;
+    }
+    .music-panel { margin-top: 56px; }
+    .music-panel[hidden] { display: none; }
+    .music-panel-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
 
     /* ─── GALLERY ────────────────────────────────── */
     #gallery { background: var(--bg-dark); padding-bottom: 80px; }
@@ -918,6 +990,25 @@
       .form-row { grid-template-columns: 1fr; }
       .live-cols { grid-template-columns: 1fr; }
       .music-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
+      /* No hover on touch screens: show a small play button on the cover instead of the "Play" link */
+      .track-play-overlay {
+        opacity: 1;
+        background: none;
+        align-items: flex-end;
+        justify-content: flex-end;
+        padding: 8px;
+      }
+      .track-play-icon { width: 30px; height: 30px; }
+      .track-foot .track-link { display: none; }
+      .folder-card .track-foot .track-link { display: inline-flex; }
+      .folder-card .track-foot .track-meta { display: none; }
+      .track-foot:has(.track-meta:empty) { display: none; }
+      .track-title {
+        white-space: normal;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+      }
       .gallery-grid { grid-template-columns: repeat(2, 1fr); }
       .gallery-item:nth-child(1),
       .gallery-item:nth-child(5) { grid-column: span 2; }
@@ -1028,89 +1119,14 @@
   <div class="container">
     <p class="section-eyebrow">Discography</p>
     <h2 class="section-title">Selected Works</h2>
-    <div class="music-grid">
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/NlLLyDK4gpM" data-embed-type="youtube" data-watch="https://youtu.be/NlLLyDK4gpM" data-title="นครดารา" data-meta="Remix · 2025">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/NlLLyDK4gpM/hqdefault.jpg" alt="นครดารา" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">นครดารา</span>
-        <span class="track-meta">Remix · 2025</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/5_g-x8Ebyo4" data-embed-type="youtube" data-watch="https://youtu.be/5_g-x8Ebyo4" data-title="True Blue (เก็บผ้า)" data-meta="Remix · 2024">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/5_g-x8Ebyo4/hqdefault.jpg" alt="True Blue" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">True Blue (เก็บผ้า)</span>
-        <span class="track-meta">Remix · 2024</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://open.spotify.com/embed/track/4AGNfcIoqP0zTAvXGVGHGI" data-embed-type="spotify" data-title="The Cage" data-meta="Remix · 2022" data-spotify="https://open.spotify.com/track/4AGNfcIoqP0zTAvXGVGHGI">
-        <div class="track-art-wrap">
-          <img class="track-art" src="" alt="The Cage" loading="lazy" data-spotify-art />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">The Cage</span>
-        <span class="track-meta">Remix · 2022</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://open.spotify.com/embed/album/3LTdTwdveOR4GmGsBLidQW" data-embed-type="spotify" data-title="Cheat Day" data-meta="Single · 2022" data-spotify="https://open.spotify.com/album/3LTdTwdveOR4GmGsBLidQW">
-        <div class="track-art-wrap">
-          <img class="track-art" src="" alt="Cheat Day" loading="lazy" data-spotify-art />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">Cheat Day</span>
-        <span class="track-meta">Single · 2022</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/tQeK9dHGCNw" data-embed-type="youtube" data-watch="https://youtu.be/tQeK9dHGCNw" data-title="ไม่อยากให้เธอไว้ใจ" data-meta="Club Mix · 2021">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/tQeK9dHGCNw/hqdefault.jpg" alt="ไม่อยากให้เธอไว้ใจ" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">ไม่อยากให้เธอไว้ใจ</span>
-        <span class="track-meta">Club Mix · 2021</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/1lnOiy3X51I" data-embed-type="youtube" data-watch="https://youtu.be/1lnOiy3X51I" data-title="เผลอ" data-meta="Disco Edit · 2021">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/1lnOiy3X51I/hqdefault.jpg" alt="เผลอ" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">เผลอ</span>
-        <span class="track-meta">Disco Edit · 2021</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/sxvJ8tiwXJc" data-embed-type="youtube" data-watch="https://youtu.be/sxvJ8tiwXJc" data-title="อย่าสัญญา" data-meta="Edit · 2021">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/sxvJ8tiwXJc/hqdefault.jpg" alt="อย่าสัญญา" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">อย่าสัญญา</span>
-        <span class="track-meta">Edit · 2021</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://open.spotify.com/embed/album/47gKgP662CscLkVkiD5eEy" data-embed-type="spotify" data-title="Wildlife EP" data-meta="EP · 2020" data-spotify="https://open.spotify.com/album/47gKgP662CscLkVkiD5eEy">
-        <div class="track-art-wrap">
-          <img class="track-art" src="" alt="Wildlife EP" loading="lazy" data-spotify-art />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">Wildlife EP</span>
-        <span class="track-meta">EP · 2020</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
+    <div class="music-grid" id="music-grid"></div>
+    <div class="music-panel" id="panel-youtube" hidden>
+      <h3 class="music-panel-title">More remixes &amp; edits</h3>
+      <div class="music-grid"></div>
+    </div>
+    <div class="music-panel" id="panel-spotify" hidden>
+      <h3 class="music-panel-title">Spotify releases</h3>
+      <div class="music-grid"></div>
     </div>
   </div>
 </section>
@@ -1362,6 +1378,95 @@
     l.addEventListener('click', () => mobileMenu.classList.remove('active'));
   });
 
+  // Discography. Add a track by adding a line here.
+  // YouTube tracks are ordered by views (counts as of Oct 2026); `isNew` pins a track first.
+  const YOUTUBE_TRACKS = [
+    { yt: 'iChgX6Sp9kw', title: 'เพียงสิ่งเดียว (Just One Thing)', artist: 'Solitude Is Bliss', kind: 'Remix', year: 2026, views: 1082, isNew: true },
+    { yt: 'NlLLyDK4gpM', title: 'นครดารา', artist: 'YOUNGOHM', kind: 'Remix', year: 2025, views: 24993 },
+    { yt: 'sxvJ8tiwXJc', title: 'อย่าสัญญา', artist: 'ธาริณี ทิวารี', kind: 'Edit', year: 2021, views: 15779 },
+    { yt: 'tQeK9dHGCNw', title: 'ไม่อยากให้เธอไว้ใจ', artist: 'Marsha', kind: 'Club Mix', year: 2021, views: 13000 },
+    { yt: '1lnOiy3X51I', title: 'เผลอ', artist: 'Mr. Z', kind: 'Disco Edit', year: 2021, views: 13000 },
+    { yt: 'fSVuPVaNkKA', title: 'Never Had a Love Like This Before', artist: 'Tavares', kind: 'Re-Edit', year: null, views: 10000 },
+    { yt: 'SPGnEDjig7I', title: 'Barbie Girl', artist: 'Mothermary', kind: 'Remix', year: 2021, views: 7589 },
+    { yt: '0eiK_DIqe7c', title: 'ทราบแล้วเปลี่ยน (Attention Please)', artist: 'BOWKYLION', kind: 'Disco Pop Edit', year: 2022, views: 5615 },
+    { yt: '1fcyUMy_7pw', title: 'แอบเจ็บ', artist: 'XYZ', kind: 'Remix', year: 2021, views: 3649 },
+    { yt: 'IPcFMEd2vq4', title: 'ฤดูที่แตกต่าง', artist: 'Boyd Kosiyapong', kind: 'Remix', year: 2025, views: 2976 },
+    { yt: '5_g-x8Ebyo4', title: 'True Blue (เก็บผ้า)', artist: 'Yellow Fang', kind: 'Remix', year: 2024, views: 2626 },
+    { yt: 'Rn1XXG2baQc', title: 'เจ้าหญิงคนต่อไป', artist: 'Blissonic x Jupiter', kind: 'Rollerskates Edit', year: 2023, views: 2429 },
+    { yt: 'R9cGrhwBCCU', title: 'ชอบอยู่คนเดียว', artist: 'Ink Waruntorn', kind: 'Remix', year: 2023, views: 2196 },
+    { yt: '8FkT2XWmzwI', title: 'Wonder', artist: 'ADOY', kind: 'Edit', year: null, views: 1900 },
+    { yt: 'i6vNBHNToSA', title: 'Real Eyes', artist: 'Motley Flower ft. Pae Arak & Numcha', kind: 'Edit', year: 2022, views: 1733 },
+    { yt: 'M9iZU-06xvY', title: '1 2 3 4 5 I Love September', artist: 'The Bottom Blues vs Earth, Wind & Fire', kind: 'Mashup', year: 2022, views: 1386 },
+    { yt: 'vXGktiHZpYA', title: 'เพื่อนเล่น ไม่เล่นเพื่อน', artist: "Tilly Birds x Cosmo's Midnight", kind: 'Fantasy Edit', year: 2024, views: 1196 },
+    { yt: 'Mctc055fHQY', title: 'Glimpse of Us', artist: 'Joji', kind: 'Remix', year: 2023, views: 886 },
+    { yt: 'wthO9GvCtTU', title: 'ผมไม่วุ่น', artist: 'The Impossibles', kind: 'Re-Edit', year: 2022, views: 698 },
+  ];
+  const SPOTIFY_RELEASES = [
+    { spotify: 'album/3LTdTwdveOR4GmGsBLidQW', title: 'Cheat Day', kind: 'Single', year: 2022 },
+    { spotify: 'track/4AGNfcIoqP0zTAvXGVGHGI', title: 'The Cage', kind: 'Remix', year: 2022 },
+    { spotify: 'album/47gKgP662CscLkVkiD5eEy', title: 'Wildlife EP', kind: 'EP', year: 2020 },
+  ];
+  const TOP_COUNT = 6; // YouTube tracks shown before the "more" cards
+
+  const playIcon = '<div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>';
+  const linkIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function trackCardHTML(t) {
+    const byline = [t.artist, t.kind].filter(Boolean).join(' · ');
+    const meta = [t.artist, t.kind, t.year].filter(Boolean).join(' · ');
+    let attrs, art;
+    if (t.yt) {
+      attrs = `data-embed="https://www.youtube.com/embed/${t.yt}" data-embed-type="youtube" data-watch="https://youtu.be/${t.yt}"`;
+      art = `<img class="track-art" src="https://img.youtube.com/vi/${t.yt}/hqdefault.jpg" alt="${t.title}" loading="lazy" />`;
+    } else {
+      attrs = `data-embed="https://open.spotify.com/embed/${t.spotify}" data-embed-type="spotify" data-spotify="https://open.spotify.com/${t.spotify}"`;
+      art = `<img class="track-art" src="" alt="${t.title}" loading="lazy" data-spotify-art />`;
+    }
+    return `<div class="track-card${t.isNew ? ' is-new' : ''}" ${attrs} data-title="${t.title}" data-meta="${meta}">
+      <div class="track-art-wrap">${art}${playIcon}</div>
+      <span class="track-title" title="${t.title}">${t.title}</span>
+      <span class="track-artist">${byline}</span>
+      <div class="track-foot"><span class="track-link">${linkIcon}Play</span><span class="track-meta">${t.year || ''}</span></div></div>`;
+  }
+  function folderCardHTML(panel, collage, count, title, sub, meta) {
+    return `<div class="track-card folder-card" data-panel="${panel}" aria-expanded="false">
+      <div class="track-art-wrap"><div class="folder-collage">${collage}</div><span class="folder-count">${count}</span></div>
+      <span class="track-title">${title}</span>
+      <span class="track-artist">${sub}</span>
+      <div class="track-foot"><span class="track-link">${linkIcon}<span class="folder-action">Show all</span></span><span class="track-meta">${meta}</span></div></div>`;
+  }
+
+  const ytSorted = [...YOUTUBE_TRACKS].sort((a, b) => (!!b.isNew - !!a.isNew) || (b.views - a.views));
+  const ytTop  = ytSorted.slice(0, TOP_COUNT);
+  const ytRest = ytSorted.slice(TOP_COUNT);
+  const ytCollage = ytRest.slice(0, 4)
+    .map(t => `<img src="https://img.youtube.com/vi/${t.yt}/mqdefault.jpg" alt="" loading="lazy" />`).join('');
+  const spCollage = SPOTIFY_RELEASES
+    .map(t => `<img src="" alt="" data-spotify="https://open.spotify.com/${t.spotify}" data-spotify-art />`).join('');
+  document.getElementById('music-grid').innerHTML = ytTop.map(trackCardHTML).join('')
+    + folderCardHTML('panel-youtube', ytCollage, `+${ytRest.length}`, 'More remixes &amp; edits', `${ytRest.length} more on Ekception Radio`, 'YouTube')
+    + folderCardHTML('panel-spotify', spCollage, SPOTIFY_RELEASES.length, 'Spotify releases', SPOTIFY_RELEASES.map(t => t.title).join(', '), 'Spotify');
+  document.querySelector('#panel-youtube .music-grid').innerHTML = ytRest.map(trackCardHTML).join('');
+  document.querySelector('#panel-spotify .music-grid').innerHTML = SPOTIFY_RELEASES.map(trackCardHTML).join('');
+
+  document.querySelectorAll('.folder-card').forEach(card => {
+    const panel = document.getElementById(card.dataset.panel);
+    card.tabIndex = 0;
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-controls', card.dataset.panel);
+    const toggle = () => {
+      const open = panel.hidden;
+      panel.hidden = !open;
+      card.setAttribute('aria-expanded', open);
+      card.querySelector('.folder-action').textContent = open ? 'Show fewer' : 'Show all';
+      if (open) panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+    });
+  });
+
   // Player bar
   const tracks         = [...document.querySelectorAll('.track-card[data-embed]')];
   const playerBar      = document.getElementById('player-bar');
@@ -1405,8 +1510,9 @@
   }
 
   function playYouTube(card) {
-    const id = card.dataset.embed.split('/').pop();
-    ytBlockedThumb.src = card.querySelector('.track-art').src;
+    const list = card.dataset.playlist;
+    const id = list ? undefined : card.dataset.embed.split('/').pop();
+    ytBlockedThumb.src = card.querySelector('img').src;
     ytWatchBtn.href = card.dataset.watch;
     playerVideo.classList.add('active');
     const target = document.createElement('div');
@@ -1416,7 +1522,9 @@
       const player = ytPlayer = new YT.Player(target, {
         host: 'https://www.youtube-nocookie.com',
         videoId: id,
-        playerVars: { autoplay: 1, playsinline: 1, rel: 0 },
+        playerVars: list
+          ? { autoplay: 1, playsinline: 1, rel: 0, listType: 'playlist', list }
+          : { autoplay: 1, playsinline: 1, rel: 0 },
         events: {
           onReady: e => e.target.playVideo(),
           onError: () => { if (ytPlayer === player) ytBlocked.classList.add('active'); }
@@ -1425,7 +1533,8 @@
     }).catch(() => {
       // API unavailable (e.g. blocked by an extension) — fall back to a plain embed
       if (!target.isConnected) return;
-      target.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      const src = list ? `videoseries?list=${list}&` : `${id}?`;
+      target.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${src}autoplay=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
     });
   }
 
@@ -1445,7 +1554,7 @@
     const isSpotify = card.dataset.embedType === 'spotify';
     card.classList.add('is-playing');
     playerBar.classList.toggle('is-spotify', isSpotify);
-    pbArt.src = card.querySelector('.track-art').src;
+    pbArt.src = card.querySelector('img').src;
     pbTitle.textContent = card.dataset.title;
     pbMeta.textContent  = card.dataset.meta;
     pbYtLink.href = card.dataset.watch || '';
@@ -1508,7 +1617,7 @@
   // Spotify artwork via oEmbed (client-side, CORS-safe)
   document.querySelectorAll('[data-spotify]').forEach(card => {
     const url = card.dataset.spotify;
-    const img = card.querySelector('[data-spotify-art]');
+    const img = card.matches('[data-spotify-art]') ? card : card.querySelector('[data-spotify-art]');
     if (!img) return;
     fetch(`https://open.spotify.com/oembed?url=${encodeURIComponent(url)}`)
       .then(r => r.json())
