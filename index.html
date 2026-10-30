@@ -267,7 +267,7 @@
     }
     .track-card {
       background: var(--white);
-      padding: 20px 36px;
+      padding: 28px 24px;
       display: flex;
       flex-direction: column;
       gap: 6px;
@@ -990,7 +990,6 @@
       .form-row { grid-template-columns: 1fr; }
       .live-cols { grid-template-columns: 1fr; }
       .music-grid { grid-template-columns: repeat(2, 1fr); gap: 2px; }
-      .track-card { padding: 16px 20px; }
       /* No hover on touch screens: show a small play button on the cover instead of the "Play" link */
       .track-play-overlay {
         opacity: 1;
@@ -1003,6 +1002,7 @@
       .track-foot .track-link { display: none; }
       .folder-card .track-foot .track-link { display: inline-flex; }
       .folder-card .track-foot .track-meta { display: none; }
+      .track-foot:has(.track-meta:empty) { display: none; }
       .track-title {
         white-space: normal;
         display: -webkit-box;
@@ -1412,8 +1412,8 @@
   const linkIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 
   function trackCardHTML(t) {
-    const meta = [t.kind, t.year].filter(Boolean).join(' · ');
-    const artist = t.artist ? `<span class="track-artist">${t.artist}</span>` : '';
+    const byline = [t.artist, t.kind].filter(Boolean).join(' · ');
+    const meta = [t.artist, t.kind, t.year].filter(Boolean).join(' · ');
     let attrs, art;
     if (t.yt) {
       attrs = `data-embed="https://www.youtube.com/embed/${t.yt}" data-embed-type="youtube" data-watch="https://youtu.be/${t.yt}"`;
@@ -1422,10 +1422,11 @@
       attrs = `data-embed="https://open.spotify.com/embed/${t.spotify}" data-embed-type="spotify" data-spotify="https://open.spotify.com/${t.spotify}"`;
       art = `<img class="track-art" src="" alt="${t.title}" loading="lazy" data-spotify-art />`;
     }
-    return `<div class="track-card${t.isNew ? ' is-new' : ''}" ${attrs} data-title="${t.title}" data-meta="${[t.artist, meta].filter(Boolean).join(' · ')}">
+    return `<div class="track-card${t.isNew ? ' is-new' : ''}" ${attrs} data-title="${t.title}" data-meta="${meta}">
       <div class="track-art-wrap">${art}${playIcon}</div>
-      <span class="track-title" title="${t.title}">${t.title}</span>${artist}
-      <div class="track-foot"><span class="track-link">${linkIcon}Play</span><span class="track-meta">${meta}</span></div></div>`;
+      <span class="track-title" title="${t.title}">${t.title}</span>
+      <span class="track-artist">${byline}</span>
+      <div class="track-foot"><span class="track-link">${linkIcon}Play</span><span class="track-meta">${t.year || ''}</span></div></div>`;
   }
   function folderCardHTML(panel, collage, count, title, sub, meta) {
     return `<div class="track-card folder-card" data-panel="${panel}" aria-expanded="false">
