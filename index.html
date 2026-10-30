@@ -308,6 +308,83 @@
     .track-link:hover { gap: 10px; }
     .track-link svg { flex-shrink: 0; }
 
+    .track-artist {
+      font-size: .82rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+      margin-top: -4px;
+    }
+    .track-card[hidden], .music-tabs[hidden], .music-more[hidden] { display: none; }
+    .music-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+    .music-tab {
+      padding: 8px 18px;
+      border: 1px solid var(--border);
+      font-size: .68rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      transition: color .2s, border-color .2s, background .2s;
+    }
+    .music-tab:hover { color: var(--text); border-color: var(--gold); }
+    .music-tab[aria-selected="true"] {
+      background: var(--bg-dark);
+      border-color: var(--bg-dark);
+      color: var(--white);
+    }
+    .music-tab-count { color: var(--gold); margin-left: 6px; }
+    .music-more {
+      display: flex;
+      justify-content: center;
+      margin-top: 36px;
+    }
+    .music-more-btn {
+      padding: 14px 32px;
+      border: 1px solid var(--gold);
+      font-size: .7rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--gold);
+      transition: background .2s, color .2s;
+    }
+    .music-more-btn:hover { background: var(--gold); color: var(--white); }
+    /* "Play all" card for the Ekception Radio channel */
+    .track-card.radio-card { background: var(--bg-dark); }
+    .radio-card .track-title { color: var(--white); }
+    .radio-card .track-artist { color: rgba(255,255,255,.55); }
+    .radio-card .track-meta { color: var(--gold); }
+    .radio-card .track-link { border-top-color: rgba(255,255,255,.12); }
+    .radio-collage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      width: 100%; height: 100%;
+    }
+    .radio-collage img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: .7;
+    }
+    /* Mockup only: Bandcamp release waiting for its embed code */
+    .track-card.is-placeholder { cursor: default; }
+    .track-card.is-placeholder .track-art-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: repeating-linear-gradient(135deg, #EFE6DA 0 12px, #F6F0E8 12px 24px);
+      border: 1px dashed var(--gold);
+      font-size: .65rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: var(--gold);
+      text-align: center;
+      padding: 16px;
+    }
+
     /* ─── GALLERY ────────────────────────────────── */
     #gallery { background: var(--bg-dark); padding-bottom: 80px; }
     #gallery .section-title { color: var(--white); }
@@ -1028,90 +1105,9 @@
   <div class="container">
     <p class="section-eyebrow">Discography</p>
     <h2 class="section-title">Selected Works</h2>
-    <div class="music-grid">
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/NlLLyDK4gpM" data-embed-type="youtube" data-watch="https://youtu.be/NlLLyDK4gpM" data-title="นครดารา" data-meta="Remix · 2025">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/NlLLyDK4gpM/hqdefault.jpg" alt="นครดารา" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">นครดารา</span>
-        <span class="track-meta">Remix · 2025</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/5_g-x8Ebyo4" data-embed-type="youtube" data-watch="https://youtu.be/5_g-x8Ebyo4" data-title="True Blue (เก็บผ้า)" data-meta="Remix · 2024">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/5_g-x8Ebyo4/hqdefault.jpg" alt="True Blue" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">True Blue (เก็บผ้า)</span>
-        <span class="track-meta">Remix · 2024</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://open.spotify.com/embed/track/4AGNfcIoqP0zTAvXGVGHGI" data-embed-type="spotify" data-title="The Cage" data-meta="Remix · 2022" data-spotify="https://open.spotify.com/track/4AGNfcIoqP0zTAvXGVGHGI">
-        <div class="track-art-wrap">
-          <img class="track-art" src="" alt="The Cage" loading="lazy" data-spotify-art />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">The Cage</span>
-        <span class="track-meta">Remix · 2022</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://open.spotify.com/embed/album/3LTdTwdveOR4GmGsBLidQW" data-embed-type="spotify" data-title="Cheat Day" data-meta="Single · 2022" data-spotify="https://open.spotify.com/album/3LTdTwdveOR4GmGsBLidQW">
-        <div class="track-art-wrap">
-          <img class="track-art" src="" alt="Cheat Day" loading="lazy" data-spotify-art />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">Cheat Day</span>
-        <span class="track-meta">Single · 2022</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/tQeK9dHGCNw" data-embed-type="youtube" data-watch="https://youtu.be/tQeK9dHGCNw" data-title="ไม่อยากให้เธอไว้ใจ" data-meta="Club Mix · 2021">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/tQeK9dHGCNw/hqdefault.jpg" alt="ไม่อยากให้เธอไว้ใจ" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">ไม่อยากให้เธอไว้ใจ</span>
-        <span class="track-meta">Club Mix · 2021</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/1lnOiy3X51I" data-embed-type="youtube" data-watch="https://youtu.be/1lnOiy3X51I" data-title="เผลอ" data-meta="Disco Edit · 2021">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/1lnOiy3X51I/hqdefault.jpg" alt="เผลอ" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">เผลอ</span>
-        <span class="track-meta">Disco Edit · 2021</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-
-      <div class="track-card" data-embed="https://www.youtube.com/embed/sxvJ8tiwXJc" data-embed-type="youtube" data-watch="https://youtu.be/sxvJ8tiwXJc" data-title="อย่าสัญญา" data-meta="Edit · 2021">
-        <div class="track-art-wrap">
-          <img class="track-art" src="https://img.youtube.com/vi/sxvJ8tiwXJc/hqdefault.jpg" alt="อย่าสัญญา" loading="lazy" />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">อย่าสัญญา</span>
-        <span class="track-meta">Edit · 2021</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-      <div class="track-card" data-embed="https://open.spotify.com/embed/album/47gKgP662CscLkVkiD5eEy" data-embed-type="spotify" data-title="Wildlife EP" data-meta="EP · 2020" data-spotify="https://open.spotify.com/album/47gKgP662CscLkVkiD5eEy">
-        <div class="track-art-wrap">
-          <img class="track-art" src="" alt="Wildlife EP" loading="lazy" data-spotify-art />
-          <div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>
-        </div>
-        <span class="track-title">Wildlife EP</span>
-        <span class="track-meta">EP · 2020</span>
-        <span class="track-link"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Play</span>
-      </div>
-
-    </div>
+    <div class="music-tabs" id="music-tabs" role="tablist" aria-label="Filter discography"></div>
+    <div class="music-grid" id="music-grid"></div>
+    <div class="music-more"><button class="music-more-btn" id="music-more">Show all</button></div>
   </div>
 </section>
 
@@ -1362,6 +1358,119 @@
     l.addEventListener('click', () => mobileMenu.classList.remove('active'));
   });
 
+  // Discography — newest first. Add a track by adding a line here.
+  // group: 'remix' (remixes & edits) or 'release' (originals)
+  const DISCOGRAPHY = [
+    { yt: 'iChgX6Sp9kw', title: 'เพียงสิ่งเดียว (Just One Thing)', artist: 'Solitude Is Bliss', kind: 'Remix', year: 2026, group: 'remix' },
+    { yt: 'NlLLyDK4gpM', title: 'นครดารา', artist: 'YOUNGOHM', kind: 'Remix', year: 2025, group: 'remix' },
+    { yt: 'IPcFMEd2vq4', title: 'ฤดูที่แตกต่าง', artist: 'Boyd Kosiyapong', kind: 'Remix', year: 2025, group: 'remix' },
+    { yt: 'vXGktiHZpYA', title: 'เพื่อนเล่น ไม่เล่นเพื่อน', artist: "Tilly Birds x Cosmo's Midnight", kind: 'Fantasy Edit', year: 2024, group: 'remix' },
+    { yt: '5_g-x8Ebyo4', title: 'True Blue (เก็บผ้า)', artist: 'Yellow Fang', kind: 'Remix', year: 2024, group: 'remix' },
+    { bandcamp: 'placeholder', title: 'Bandcamp release', artist: 'Ekception', kind: 'Single', year: null, group: 'release' },
+    { yt: 'R9cGrhwBCCU', title: 'ชอบอยู่คนเดียว', artist: 'Ink Waruntorn', kind: 'Remix', year: 2023, group: 'remix' },
+    { yt: 'Rn1XXG2baQc', title: 'เจ้าหญิงคนต่อไป', artist: 'Blissonic x Jupiter', kind: 'Rollerskates Edit', year: 2023, group: 'remix' },
+    { yt: 'Mctc055fHQY', title: 'Glimpse of Us', artist: 'Joji', kind: 'Remix', year: 2023, group: 'remix' },
+    { yt: 'M9iZU-06xvY', title: '1 2 3 4 5 I Love September', artist: 'The Bottom Blues vs Earth, Wind & Fire', kind: 'Mashup', year: 2022, group: 'remix' },
+    { yt: 'wthO9GvCtTU', title: 'ผมไม่วุ่น', artist: 'The Impossibles', kind: 'Re-Edit', year: 2022, group: 'remix' },
+    { yt: '0eiK_DIqe7c', title: 'ทราบแล้วเปลี่ยน (Attention Please)', artist: 'BOWKYLION', kind: 'Disco Pop Edit', year: 2022, group: 'remix' },
+    { yt: 'i6vNBHNToSA', title: 'Real Eyes', artist: 'Motley Flower ft. Pae Arak & Numcha', kind: 'Edit', year: 2022, group: 'remix' },
+    { spotify: 'track/4AGNfcIoqP0zTAvXGVGHGI', title: 'The Cage', artist: null, kind: 'Remix', year: 2022, group: 'remix' },
+    { spotify: 'album/3LTdTwdveOR4GmGsBLidQW', title: 'Cheat Day', artist: 'Ekception', kind: 'Single', year: 2022, group: 'release' },
+    { yt: 'tQeK9dHGCNw', title: 'ไม่อยากให้เธอไว้ใจ', artist: 'Marsha', kind: 'Club Mix', year: 2021, group: 'remix' },
+    { yt: '1lnOiy3X51I', title: 'เผลอ', artist: 'Mr. Z', kind: 'Disco Edit', year: 2021, group: 'remix' },
+    { yt: 'sxvJ8tiwXJc', title: 'อย่าสัญญา', artist: 'ธาริณี ทิวารี', kind: 'Edit', year: 2021, group: 'remix' },
+    { yt: 'SPGnEDjig7I', title: 'Barbie Girl', artist: 'Mothermary', kind: 'Remix', year: 2021, group: 'remix' },
+    { yt: '1fcyUMy_7pw', title: 'แอบเจ็บ', artist: 'XYZ', kind: 'Remix', year: 2021, group: 'remix' },
+    { bandcamp: 'placeholder', title: 'Bandcamp release', artist: 'Ekception', kind: 'EP', year: null, group: 'release' },
+    { yt: '8FkT2XWmzwI', title: 'Wonder', artist: 'ADOY', kind: 'Edit', year: null, group: 'remix' },
+    { yt: 'fSVuPVaNkKA', title: 'Never Had a Love Like This Before', artist: 'Tavares', kind: 'Re-Edit', year: null, group: 'remix' },
+    { spotify: 'album/47gKgP662CscLkVkiD5eEy', title: 'Wildlife EP', artist: 'Ekception', kind: 'EP', year: 2020, group: 'release' },
+  ];
+  const RADIO_UPLOADS = 'UU_btRn1ohsOyvvQ56eWdP2w'; // Ekception Radio channel uploads playlist
+  const VISIBLE = 8;
+  const layout = new URLSearchParams(location.search).get('layout') === 'tabs' ? 'tabs' : 'more'; // mockup toggle
+
+  const playIcon = '<div class="track-play-overlay"><span class="track-play-icon"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><polygon points="4,2 12,7 4,12" fill="#1C1A18"/></svg></span></div>';
+  const linkIcon = '<svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  function trackCardHTML(t) {
+    const meta = [t.kind, t.year].filter(Boolean).join(' · ');
+    const artist = t.artist ? `<span class="track-artist">${t.artist}</span>` : '';
+    if (t.bandcamp === 'placeholder') {
+      return `<div class="track-card is-placeholder" data-group="${t.group}">
+        <div class="track-art-wrap">Bandcamp release<br>— waiting for embed code —</div>
+        <span class="track-title">${t.title}</span>${artist}<span class="track-meta">${meta}</span>
+        <span class="track-link">${linkIcon}Bandcamp</span></div>`;
+    }
+    let attrs, art;
+    if (t.yt) {
+      attrs = `data-embed="https://www.youtube.com/embed/${t.yt}" data-embed-type="youtube" data-watch="https://youtu.be/${t.yt}"`;
+      art = `<img class="track-art" src="https://img.youtube.com/vi/${t.yt}/hqdefault.jpg" alt="${t.title}" loading="lazy" />`;
+    } else {
+      attrs = `data-embed="https://open.spotify.com/embed/${t.spotify}" data-embed-type="spotify" data-spotify="https://open.spotify.com/${t.spotify}"`;
+      art = `<img class="track-art" src="" alt="${t.title}" loading="lazy" data-spotify-art />`;
+    }
+    return `<div class="track-card" ${attrs} data-title="${t.title}" data-meta="${[t.artist, meta].filter(Boolean).join(' · ')}" data-group="${t.group}">
+      <div class="track-art-wrap">${art}${playIcon}</div>
+      <span class="track-title">${t.title}</span>${artist}<span class="track-meta">${meta}</span>
+      <span class="track-link">${linkIcon}Play</span></div>`;
+  }
+  function radioCardHTML() {
+    const count = DISCOGRAPHY.filter(t => t.yt).length;
+    const thumbs = DISCOGRAPHY.filter(t => t.yt).slice(0, 4)
+      .map(t => `<img src="https://img.youtube.com/vi/${t.yt}/mqdefault.jpg" alt="" loading="lazy" />`).join('');
+    return `<div class="track-card radio-card" data-embed="https://www.youtube.com/embed/videoseries?list=${RADIO_UPLOADS}" data-embed-type="youtube" data-playlist="${RADIO_UPLOADS}" data-watch="https://www.youtube.com/@EkceptionRadio" data-title="Ekception Radio" data-meta="All remixes & edits" data-group="remix">
+      <div class="track-art-wrap"><div class="radio-collage">${thumbs}</div>${playIcon}</div>
+      <span class="track-title">Play all on Ekception Radio</span>
+      <span class="track-artist">${count} remixes &amp; edits, plus every new upload</span>
+      <span class="track-meta">YouTube playlist</span>
+      <span class="track-link">${linkIcon}Play all</span></div>`;
+  }
+
+  const musicGrid = document.getElementById('music-grid');
+  const musicTabs = document.getElementById('music-tabs');
+  const musicMore = document.getElementById('music-more');
+  musicGrid.innerHTML = DISCOGRAPHY.map(trackCardHTML).join('') + radioCardHTML();
+  let musicFilter = 'all';
+  let musicExpanded = false;
+
+  function updateGrid() {
+    const cards = [...musicGrid.children];
+    const matching = cards.filter(c => musicFilter === 'all' || c.dataset.group === musicFilter);
+    const radio = musicGrid.querySelector('.radio-card');
+    cards.forEach(c => { c.hidden = !matching.includes(c); });
+    if (!musicExpanded && matching.length > VISIBLE + 1) {
+      // keep the "play all" card visible as the last tile
+      matching.filter(c => c !== radio).slice(VISIBLE - 1).forEach(c => { c.hidden = true; });
+    }
+    const total = matching.filter(c => c !== radio).length;
+    musicMore.parentElement.hidden = matching.length <= VISIBLE + 1;
+    musicMore.textContent = musicExpanded ? 'Show fewer' : `Show all ${total} tracks`;
+  }
+  if (layout === 'tabs') {
+    const groups = [['all', 'All'], ['remix', 'Remixes & Edits'], ['release', 'Releases']];
+    musicTabs.innerHTML = groups.map(([g, label]) => {
+      const n = DISCOGRAPHY.filter(t => g === 'all' || t.group === g).length;
+      return `<button class="music-tab" role="tab" data-group="${g}" aria-selected="${g === 'all'}">${label}<span class="music-tab-count">${n}</span></button>`;
+    }).join('');
+    musicTabs.addEventListener('click', e => {
+      const tab = e.target.closest('.music-tab');
+      if (!tab) return;
+      musicFilter = tab.dataset.group;
+      musicExpanded = false;
+      musicTabs.querySelectorAll('.music-tab').forEach(b => b.setAttribute('aria-selected', b === tab));
+      updateGrid();
+    });
+  } else {
+    musicTabs.hidden = true;
+  }
+  musicMore.addEventListener('click', () => {
+    musicExpanded = !musicExpanded;
+    updateGrid();
+    if (!musicExpanded) document.getElementById('music').scrollIntoView();
+  });
+  updateGrid();
+
   // Player bar
   const tracks         = [...document.querySelectorAll('.track-card[data-embed]')];
   const playerBar      = document.getElementById('player-bar');
@@ -1405,8 +1514,9 @@
   }
 
   function playYouTube(card) {
-    const id = card.dataset.embed.split('/').pop();
-    ytBlockedThumb.src = card.querySelector('.track-art').src;
+    const list = card.dataset.playlist;
+    const id = list ? undefined : card.dataset.embed.split('/').pop();
+    ytBlockedThumb.src = card.querySelector('img').src;
     ytWatchBtn.href = card.dataset.watch;
     playerVideo.classList.add('active');
     const target = document.createElement('div');
@@ -1416,7 +1526,9 @@
       const player = ytPlayer = new YT.Player(target, {
         host: 'https://www.youtube-nocookie.com',
         videoId: id,
-        playerVars: { autoplay: 1, playsinline: 1, rel: 0 },
+        playerVars: list
+          ? { autoplay: 1, playsinline: 1, rel: 0, listType: 'playlist', list }
+          : { autoplay: 1, playsinline: 1, rel: 0 },
         events: {
           onReady: e => e.target.playVideo(),
           onError: () => { if (ytPlayer === player) ytBlocked.classList.add('active'); }
@@ -1425,7 +1537,8 @@
     }).catch(() => {
       // API unavailable (e.g. blocked by an extension) — fall back to a plain embed
       if (!target.isConnected) return;
-      target.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${id}?autoplay=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+      const src = list ? `videoseries?list=${list}&` : `${id}?`;
+      target.outerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${src}autoplay=1&playsinline=1&rel=0" allow="autoplay; encrypted-media; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
     });
   }
 
@@ -1445,7 +1558,7 @@
     const isSpotify = card.dataset.embedType === 'spotify';
     card.classList.add('is-playing');
     playerBar.classList.toggle('is-spotify', isSpotify);
-    pbArt.src = card.querySelector('.track-art').src;
+    pbArt.src = card.querySelector('img').src;
     pbTitle.textContent = card.dataset.title;
     pbMeta.textContent  = card.dataset.meta;
     pbYtLink.href = card.dataset.watch || '';
